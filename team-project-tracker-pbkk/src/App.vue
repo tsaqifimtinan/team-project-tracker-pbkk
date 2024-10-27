@@ -6,6 +6,7 @@ import TheWelcome from './components/TheWelcome.vue'
   <header>
     <nav class="navbar">
       <ul>
+        <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/register">Register</a></li>
         <li><a href="/login">Login</a></li>
         <li><a href="/about">About</a></li>
@@ -19,10 +20,6 @@ import TheWelcome from './components/TheWelcome.vue'
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
 .navbar {
   position: fixed;
   top: 0;
@@ -35,6 +32,8 @@ header {
   text-align: center;
   padding: 1.5rem 2rem;
 }
+
+
 
 .navbar ul {
   list-style: none;
@@ -61,9 +60,11 @@ main {
   justify-content: center;
   align-items: center;
   height: calc(100vh - 3rem); /* Adjust this value if the navbar height changes */
-  padding-top: 3rem; /* Adjust this value if the navbar height changes */
   box-sizing: border-box;
   flex-direction: column; /* Ensure vertical alignment */
+  font-size: 1.2rem; /* Increase font size for better readability */
+  text-align: left; /* Center text for better readability */
+  width: 100%; /* Ensure main content takes full width */
 }
 
 @media (min-width: 1024px) {
