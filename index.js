@@ -1,17 +1,14 @@
 import express from 'express';
-import routes from '/team-project-tracker-pbkk/routes';
+import routes from './routes'; // Adjust the path as necessary
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
-
-const express = require('express');
-const session = require('express-session');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+import { Strategy as LocalStrategy } from 'passport-local';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -27,23 +24,8 @@ passport.use(new LocalStrategy(
   }
 ));
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  // Replace with your user fetching logic
-  done(null, { id: 1, username: 'user' });
-});
-
-app.post('/login', passport.authenticate('local'), (req, res) => {
-  res.send('Logged in');
-});
-
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.send('Logged out');
-});
+// Add your routes here
+app.use('/api', routes);
 
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
