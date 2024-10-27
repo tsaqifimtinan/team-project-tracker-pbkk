@@ -1,5 +1,4 @@
 <script setup>
-import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
@@ -15,7 +14,7 @@ import TheWelcome from './components/TheWelcome.vue'
   </header>
 
   <main>
-    <TheWelcome />
+    <router-view></router-view>
   </main>
 </template>
 
@@ -32,8 +31,6 @@ import TheWelcome from './components/TheWelcome.vue'
   text-align: center;
   padding: 1.5rem 2rem;
 }
-
-
 
 .navbar ul {
   list-style: none;

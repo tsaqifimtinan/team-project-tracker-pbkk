@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '../store';
-import Home from '../views/Home.vue';
-import Login from '../views/Login.vue';
+import Home from '../components/Home.vue';
+import Dashboard from '../components/Dashboard.vue';
+import Register from '../components/Register.vue';
+import Login from '../components/Login.vue';
+import About from '../components/About.vue';
 
 const routes = [
-  { path: '/', component: Home, meta: { requiresAuth: true } },
+  { path: '/', component: Home },
+  { path: '/dashboard', component: Dashboard },
+  { path: '/register', component: Register },
   { path: '/login', component: Login },
+  { path: '/about', component: About },
 ];
 
 const router = createRouter({
