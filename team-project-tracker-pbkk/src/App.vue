@@ -15,7 +15,7 @@ const route = useRoute();
       </ul>
     </nav>
   </header>
-  <div :class="{ 'no-margin': route.meta.noMargin }" id="app">
+  <div :class="{ 'no-margin': route.meta.noMargin }" id="app-container">
     <aside v-if="!route.meta.hideSidebar" class="sidebar">
       <!-- Sidebar content here -->
     </aside>
@@ -55,12 +55,13 @@ const route = useRoute();
   background-color: #fff;
   color: #000;
 }
-#app {
-  margin: 0 auto;
+#app-container {
+  margin: 0;
   display: flex;
+  margin-top: 3rem; /* Default margin for pages with sidebar */
 }
 .no-margin {
-  margin: 0;
+  margin: 0; /* Remove top margin for pages without sidebar */
 }
 main {
   display: flex;
