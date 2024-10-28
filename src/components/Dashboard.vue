@@ -1,14 +1,24 @@
 <template>
   <div class="dashboard">
     <aside class="sidebar">
+      <h2>Menu</h2>
       <ul>
-        <li v-for="project in projects" :key="project.id" @click="selectProject(project)">
-          {{ project.name }}
-        </li>
+        <li @click="selectMenu('projects')">Projects</li>
+        <li @click="selectMenu('calendar')">Calendar</li>
+        <li @click="selectMenu('todaysTasks')">Today's Tasks</li>
+        <li @click="selectMenu('todaysAppointments')">Today's Appointments</li>
       </ul>
+      <div v-if="selectedMenu === 'projects'">
+        <h2>Projects</h2>
+        <select v-model="selectedProjectId" @change="selectProject">
+          <option v-for="project in projects" :key="project.id" :value="project.id">
+            {{ project.name }}
+          </option>
+        </select>
+      </div>
     </aside>
     <main class="main-content">
-      <div v-if="selectedProject">
+      <div v-if="selectedMenu === 'projects' && selectedProject">
         <h1>{{ selectedProject.name }}</h1>
         <p>{{ selectedProject.description }}</p>
         <table>
@@ -27,16 +37,34 @@
         </table>
         <button @click="addTask">Add New Task</button>
       </div>
-      <div v-else>
+      <div v-if="selectedMenu === 'projects' && !selectedProject">
         <h1>Welcome to the Dashboard</h1>
-        <p>Select a project from the sidebar to view details.</p>
+        <p>Select a project from the dropdown to view details.</p>
+      </div>
+      <div v-if="selectedMenu === 'calendar'" class="calendar-section">
+        <h2>Calendar</h2>
+        <vue-cal v-model="appointments" @cell-click="addAppointment"></vue-cal>
+      </div>
+      <div v-if="selectedMenu === 'todaysTasks'" class="today-section">
+        <h2>Today's Tasks</h2>
+        <ul>
+          <li v-for="task in todaysTasks" :key="task.id">{{ task.title }}</li>
+        </ul>
+      </div>
+      <div v-if="selectedMenu === 'todaysAppointments'" class="today-section">
+        <h2>Today's Appointments</h2>
+        <ul>
+          <li v-for="appointment in todaysAppointments" :key="appointment.id">{{ appointment.title }}</li>
+        </ul>
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
 
 const projects = ref([
   { id: 1, name: 'Not Started', description: 'Projects that has not been started yet', tasks: [
@@ -53,10 +81,11 @@ const projects = ref([
   ]},
 ]);
 
-const selectedProject = ref(null);
+const selectedProjectId = ref(null);
+const selectedProject = computed(() => projects.value.find(project => project.id === selectedProjectId.value));
 
-const selectProject = (project) => {
-  selectedProject.value = project;
+const selectProject = () => {
+  selectedProject.value = projects.value.find(project => project.id === selectedProjectId.value);
 };
 
 const addTask = () => {
@@ -68,6 +97,29 @@ const addTask = () => {
       description: `Description for Task ${newTaskId}`,
     });
   }
+};
+
+const appointments = ref([]);
+const addAppointment = ({ start, end }) => {
+  const title = prompt('Enter appointment title:');
+  if (title) {
+    appointments.value.push({ id: Date.now(), start, end, title });
+  }
+};
+
+const todaysTasks = computed(() => {
+  const today = new Date().toISOString().split('T')[0];
+  return selectedProject.value ? selectedProject.value.tasks.filter(task => task.date === today) : [];
+});
+
+const todaysAppointments = computed(() => {
+  const today = new Date().toISOString().split('T')[0];
+  return appointments.value.filter(appointment => appointment.start.split('T')[0] === today);
+});
+
+const selectedMenu = ref('projects');
+const selectMenu = (menu) => {
+  selectedMenu.value = menu;
 };
 </script>
 
@@ -107,8 +159,13 @@ const addTask = () => {
 }
 
 .sidebar li:hover {
-  background-color: #fff;
-  color: #000;
+  background-color: #e0e0e0;
+}
+
+.sidebar select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .main-content {
@@ -152,5 +209,18 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.calendar-section {
+  margin-top: 2rem;
+}
+
+/* Add padding to the days in the calendar */
+::v-deep .vuecal__cell {
+  padding: 10px;
+}
+
+.today-section {
+  margin-top: 2rem;
 }
 </style>
