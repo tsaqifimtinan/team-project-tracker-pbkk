@@ -1,4 +1,7 @@
 <script setup>
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 </script>
 
 <template>
@@ -12,10 +15,14 @@
       </ul>
     </nav>
   </header>
-
-  <main>
-    <router-view></router-view>
-  </main>
+  <div :class="{ 'no-margin': route.meta.noMargin }" id="app">
+    <aside v-if="!route.meta.hideSidebar" class="sidebar">
+      <!-- Sidebar content here -->
+    </aside>
+    <main>
+      <router-view></router-view>
+    </main>
+  </div>
 </template>
 
 <style scoped>
@@ -31,7 +38,6 @@
   text-align: center;
   padding: 1.5rem 2rem;
 }
-
 .navbar ul {
   list-style: none;
   padding: 0;
@@ -40,18 +46,22 @@
   gap: 1rem;
   margin: 0;
 }
-
 .navbar a {
   text-decoration: none;
   color: #fff; /* Change font color to white */
   font-weight: bold;
 }
-
 .navbar a:hover {
   background-color: #fff;
   color: #000;
 }
-
+#app {
+  margin: 0 auto;
+  display: flex;
+}
+.no-margin {
+  margin: 0;
+}
 main {
   display: flex;
   justify-content: center;
@@ -63,7 +73,17 @@ main {
   text-align: left; /* Center text for better readability */
   width: 100%; /* Ensure main content takes full width */
 }
-
+.sidebar {
+  width: 250px;
+  background-color: #333;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed; /* Fix the sidebar to the left side */
+  top: 3rem; /* Position below the navbar */
+  bottom: 0;
+  left: 0;
+  overflow-y: auto; /* Add scroll if content overflows */
+}
 @media (min-width: 1024px) {
   .navbar ul {
     justify-content: flex-start;

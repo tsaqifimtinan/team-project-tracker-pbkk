@@ -8,11 +8,11 @@ import About from '../components/About.vue';
 
 const routes = [
   { path: '/', component: Home },
-  { path: '/dashboard', component: Dashboard },
-  { path: '/register', component: Register },
-  { path: '/login', component: Login },
-  { path: '/about', component: About },
-];
+  { path: '/dashboard', component: Dashboard, meta: { noMargin: true } },
+  { path: '/register', component: Register, meta: { hideSidebar: true } },
+  { path: '/login', component: Login, meta: { hideSidebar: true } },
+  { path: '/about', component: About, meta: { hideSidebar: true } }
+]
 
 const router = createRouter({
   history: createWebHistory(),
